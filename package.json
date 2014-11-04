@@ -1,0 +1,23 @@
+{
+  "name": "cameralens",
+  "private": "true",
+  "version": "0.0.1",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "body-parser": "~1.0.0",
+    "connect-mongo": "^0.4.1",
+    "cookie-parser": "~1.0.1",
+    "csv": "^0.4.1",
+    "ejs": "~0.8.5",
+    "ejs-locals": "^1.0.2",
+    "express": "~4.2.0",
+    "express-session": "^1.2.1",
+    "lodash": "^2.4.1",
+    "mongojs": "^0.15.1",
+    "morgan": "~1.0.0",
+    "static-favicon": "~1.0.0",
+    "ya-csv": "^0.9.4"
+  }
+}
