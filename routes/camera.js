@@ -37,7 +37,7 @@ var reader = csv.createCsvFileReader('data/test.csv', {columnsFromHeader:true, '
 reader.addListener('data', function(data){
   //do something with data
   console.log('CRUNCHING: ',data);
-  // filter
+  // filter - using the JSON from goog-refine.
   // foramt 
   // save to mongo
 }) 
