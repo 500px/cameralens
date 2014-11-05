@@ -7,8 +7,14 @@ var csv = require('ya-csv');
 // DB setup
 
 var db_url = process.env.MONGOHQ_URL || 'mongodb://localhost:27020/cameralens'; 
-var db = mongojs(db_url, ['photos', 'cameras', 'lenses']);
+var db = mongojs(db_url, ['photos', 'cameras', 'lenses',]);
 
+db.cameras.save({ name: 'hehe' }, function(err, success){
+  console.log('yaya!')
+});
+
+
+db.cameras.ensureIndex( ['name', 'mount'] )
 
 
 
@@ -29,13 +35,16 @@ router.get('/', function(req, res) {
 var reader = csv.createCsvFileReader('data/test.csv', {columnsFromHeader:true, 'separator': ','});
 //var writer = new csv.CsvWriter(process.stdout);
 reader.addListener('data', function(data){
-//do something with data
-console.log('CRUNCHING: ',data);
-})
+  //do something with data
+  console.log('CRUNCHING: ',data);
+  // filter
+  // foramt 
+  // save to mongo
+}) 
 
 reader.addListener('end', function(){
-console.log('thats it, yay!');
-//maybe save to flat file, database, whatever.
+  console.log('thats it, yay!');
+  //maybe save to flat file, database, whatever.
 })
 
 
