@@ -13,7 +13,7 @@ db.photos.ensureIndex( {camera: 1} );
 db.photos.ensureIndex( {lens: 1} );
 
 // build camera data normalization dictionary
-cameraNormalize = JSON.parse(fs.readFileSync("data/camera_normalize.json", "utf8")); 
+cameraNormalize = JSON.parse(fs.readFileSync("refine_cluster.json", "utf8")); 
 dictionary = {}
 
 cameraNormalize.forEach(function(column) {

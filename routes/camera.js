@@ -9,16 +9,6 @@ var csv = require('ya-csv');
 var db_url = process.env.MONGOHQ_URL || 'mongodb://localhost:27020/cameralens'; 
 var db = mongojs(db_url, ['photos', 'cameras', 'lenses',]);
 
-db.cameras.save({ name: 'hehe' }, function(err, success){
-  console.log('yaya!')
-});
-
-
-db.cameras.ensureIndex( ['name', 'mount'] )
-
-
-
-
 router.get('/', function(req, res) {
   // find everything
   db.cameras.find(function(err, cameras) {
@@ -29,49 +19,31 @@ router.get('/', function(req, res) {
 });
 
 
-
-// parse CSV  -- madness
-
-var reader = csv.createCsvFileReader('data/test.csv', {columnsFromHeader:true, 'separator': ','});
-//var writer = new csv.CsvWriter(process.stdout);
-reader.addListener('data', function(data){
-  //do something with data
-  console.log('CRUNCHING: ',data);
-  // filter - using the JSON from goog-refine.
-  // foramt 
-  // save to mongo
-}) 
-
-reader.addListener('end', function(){
-  console.log('thats it, yay!');
-  //maybe save to flat file, database, whatever.
-})
-
-
-var CAMERAS = []
+var CAMERAS = [];
 function getCameras(callback){
-  if(CAMERAS.length) return  callback(CAMERAS);
-  db.cameras.find({}, {}, function(err, cameras) { 
+  if(CAMERAS.length) return callback(CAMERAS);
+
+  db.cameras.find({}, function(err, cameras) { 
       CAMERAS = cameras; 
       callback(CAMERAS)
   }); 
 }
 
 
-function getPhotoset(camera, lens){
+function getPhotoset(camera, lens, callback){
   // lens is optional
-  var find = {camera:camera}
+  var find = {camera: camera}
   if(lens) find.lens = lens;
-  db.photos.find(find).limit(50, funciton(err, docs){
-    cb(docs);
-  })
-  // return 50 photos, ordere by DESH 
 
+  db.photos.find(find).limit(50, function(err, docs){
+    callback(docs);
+  });
+  // return 50 photos, ordere by DESC 
 }
 
 
 
-
+/*
 function getPhotoDetail(id, cb){
   api.getPhoto(cb)
 }
@@ -106,29 +78,22 @@ function getPhotoStats(camera, lens){
 return data
 }
 
+*/
 
 // camera details
 router.get('/camera/:name', function(req, res) {
   console.log('Showing camera: '+req.params.name)
+  
   getCameras(function(cameras){
    db.cameras.findOne({name: req.params.name}, function(err, cam) {
-      // docs is an array of all the documents in mycollection
-
-
-async.map([ photosIds ] getPhotoDetail, funciton( allDetails){
-  console.log('all done!')
-})
-
-
-
-      res.render('camera', { cameras:  cameras, cam: cam, photoset, photo_by_months:photo_by_months });
-   }); 
+      getPhotoset(cam.camera, cam.lens, function(err, photoset) {
+        // docs is an array of all the documents in mycollection
+        console.log(cam.name);
+        res.render('camera', { cameras:  cameras, cam: cam, photoset: photoset });
+      });
+    }); 
  });
 });
-
-
-
-
 
 
 module.exports = router;
