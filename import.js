@@ -7,8 +7,10 @@ var csv = require('ya-csv');
 var db_url = process.env.MONGOHQ_URL || 'mongodb://localhost:27020/cameralens'; 
 var db = mongojs(db_url, ['photos', 'cameras', 'lenses']);
 
-db.cameras.ensureIndex( ['name'] );
-db.lenses.ensureIndex( ['name'] );
+db.cameras.ensureIndex( {name: 1}, {unique: true} );
+db.lenses.ensureIndex( {name: 1}, {unique: true} );
+db.photos.ensureIndex( {camera: 1} );
+db.photos.ensureIndex( {lens: 1} );
 
 // build camera data normalization dictionary
 cameraNormalize = JSON.parse(fs.readFileSync("data/camera_normalize.json", "utf8")); 
