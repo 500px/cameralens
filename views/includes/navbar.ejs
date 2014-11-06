@@ -18,6 +18,8 @@
 
 <div id="topBand"></div>
 
+
+
  
     	
 <nav class="navbar navbar-reverse" role="navigation" id="navbar">
@@ -27,7 +29,12 @@
       </a> 
     </div>
 
- 
+ <ul>
+<% for(var i=0; i<cameras.length; i++) {
+  var c = cameras[i];  %>
+   <li ><a href="/camera/<%= c._id %>"<%= c.name %></a></li>
+<% } %>
+</ul>
 
  
   </div>

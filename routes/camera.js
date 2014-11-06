@@ -48,14 +48,67 @@ reader.addListener('end', function(){
 })
 
 
+var CAMERAS = []
+function getCameras(callback){
+  if(CAMERAS.length) return  callback(CAMERAS);
+  db.cameras.find({}, {}, function(err, cameras) { 
+      CAMERAS = cameras; 
+      callback(CAMERAS)
+  }); 
+}
+
+
+function getPhotoset(camera, lens){
+  // lens is optional
+  var find = {camera:camera}
+  if(lens) find.lens = lens;
+  db.photos.find(find).limit(50, funciton(err, docs){
+    cb(docs);
+  })
+  // return 50 photos, ordere by DESH 
+
+}
+
+
+
+function getPhotoStats(camera, lens){
+
+  // specs: http://www.chartjs.org/docs/
+  var data = {
+    labels: ["January", "February", "March", "April", "May", "June", "July"],
+    datasets: [
+        {
+            label: "My First dataset",
+            fillColor: "rgba(220,220,220,0.5)",
+            strokeColor: "rgba(220,220,220,0.8)",
+            highlightFill: "rgba(220,220,220,0.75)",
+            highlightStroke: "rgba(220,220,220,1)",
+            data: [65, 59, 80, 81, 56, 55, 40]
+        },
+        {
+            label: "My Second dataset",
+            fillColor: "rgba(151,187,205,0.5)",
+            strokeColor: "rgba(151,187,205,0.8)",
+            highlightFill: "rgba(151,187,205,0.75)",
+            highlightStroke: "rgba(151,187,205,1)",
+            data: [28, 48, 40, 19, 86, 27, 90]
+        }
+    ]
+};
+
+return data
+}
+
 
 // camera details
 router.get('/camera/:name', function(req, res) {
   console.log('Showing camera: '+req.params.name)
-  db.cameras.findOne({name: req.params.name}, function(err, cam) {
+  getCameras(function(cameras){
+   db.cameras.findOne({name: req.params.name}, function(err, cam) {
       // docs is an array of all the documents in mycollection
-      res.render('camera', { cameras: cameras || {} });
-  }); 
+      res.render('camera', { cameras:  cameras, cam: cam, photoset, photo_by_months:photo_by_months });
+   }); 
+ });
 });
 
 
