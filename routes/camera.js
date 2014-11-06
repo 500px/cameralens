@@ -71,6 +71,13 @@ function getPhotoset(camera, lens){
 
 
 
+
+function getPhotoDetail(id, cb){
+  api.getPhoto(cb)
+}
+
+
+
 function getPhotoStats(camera, lens){
 
   // specs: http://www.chartjs.org/docs/
@@ -106,6 +113,14 @@ router.get('/camera/:name', function(req, res) {
   getCameras(function(cameras){
    db.cameras.findOne({name: req.params.name}, function(err, cam) {
       // docs is an array of all the documents in mycollection
+
+
+async.map([ photosIds ] getPhotoDetail, funciton( allDetails){
+  console.log('all done!')
+})
+
+
+
       res.render('camera', { cameras:  cameras, cam: cam, photoset, photo_by_months:photo_by_months });
    }); 
  });
