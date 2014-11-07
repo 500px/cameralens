@@ -29,14 +29,14 @@ cameraNormalize.forEach(function(column) {
 
 
 
-var createCamera = function(cameraName, lensDoc, callback) {
+var createCamera = function(cameraName, lensName, callback) {
   db.cameras.update({
     name: cameraName
   }, {
     '$setOnInsert': {
       name: cameraName
     }, '$addToSet': {
-      lenses: lensDoc.name
+      lenses: lensName
     }, '$inc': {
       photoCount: 1
     }
@@ -60,7 +60,6 @@ var createLens = function(lensName, callback) {
   }, {upsert: true}, function() {
     db.lenses.findOne({name: lensName}, function(err, doc) {
       if (err) console.log("LENSES ERROR!", err);
-      if (doc == null) console.log("IZ NULL!!!", err);
       callback(err, doc);
     });
   });
@@ -70,8 +69,8 @@ var count = 0;
 var finished = false;
 var total = 0;
 
-var finishedFirstLens = false;
-var finishedFirstCamera = false;
+var lensCount = 0;
+var cameraCount = 0;
 
 var reader = csv.createCsvFileReader('photo_meta.csv.small', 
                                      {'separator': ',',
@@ -94,20 +93,15 @@ reader.addListener('data', function(data){
   if (lensName == null) {
     lensName = String(data.lens).trim();
   }
- 
+
+  if (lensCount == 0 && (total % 10000 == 0 || total == 1)) console.log("Finished processing CSV file row #", total);
   createLens(lensName, function(err, lensDoc) {
-    if (!finishedFirstLens) {
-      finishedFirstLens = true;
-      console.log("Finished making first lens item!");
-    }
-    createCamera(cameraName, lensDoc, function(err, cameraDoc) {
-      if (!finishedFirstCamera) {
-        finishedFirstCamera = true;
-        console.log("Finished making first camera item!");
-      }
+    if (cameraCount == 0 && (++lensCount % 1000 == 0 || lensCount == 1)) console.log("Finished processing lens for photo #", lensCount);
+    createCamera(cameraName, lensName, function(err, cameraDoc) {
+      if (count == 0 && (++cameraCount % 1000 == 0 || cameraCount == 1)) console.log("Finished processing camera for photo #", cameraCount);
       db.photos.insert({
-        camera: cameraDoc.name,
-        lens: lensDoc.name,
+        camera: cameraName,
+        lens: lensName,
         id: data.id,
         focal_length: data.focal_length,
         iso: data.iso,
@@ -121,11 +115,8 @@ reader.addListener('data', function(data){
           process.exit(0);
         }
       });
-
     });
   });
-
-
 }); 
 
 reader.addListener('end', function(){

@@ -82,7 +82,7 @@ return data
 
 // camera details
 router.get('/camera/:name', function(req, res) {
-  console.log('Showing camera: '+req.params.name)
+  console.log('Showing camera: ', req.params.id)
   
   getCameras(function(cameras){
    db.cameras.findOne({name: req.params.name}, function(err, cam) {
