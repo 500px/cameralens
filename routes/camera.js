@@ -9,14 +9,6 @@ var csv = require('ya-csv');
 var db_url = process.env.MONGOHQ_URL || 'mongodb://localhost:27020/cameralens'; 
 var db = mongojs(db_url, ['photos', 'cameras', 'lenses',]);
 
-router.get('/', function(req, res) {
-  getCameras(function(err, cameras) {
-      // docs is an array of all the documents in mycollection
-      console.log('cameras',cameras);
-      res.render('home', { cameras: cameras || []  });
-  });
-  
-});
 
 function getCameras(callback){
   db.cameras.find().sort({
@@ -28,7 +20,7 @@ function getLenses(camera, callback) {
   db.cameras.findOne({name: camera}, function(err, docs) {
     db.lenses.find({
       _id: { '$in': docs.lenses }
-    }, callback);
+    }).sort().limit(20, callback);
   });
 }
 
@@ -37,12 +29,13 @@ function getPhotoset(camera, lens, callback){
   var find = {camera: camera}
   if (lens) find.lens = lens;
 
-  db.photos.find(find).limit(50, callback);
+  db.photos.find(find).sort({highest_rating: -1}).limit(60, callback);
   // return 50 photos, ordere by DESC 
 }
 
-
-
+function getPhotosFromCamera(camera, callback) {
+  db.photos.find({camera: camera}).sort({highest_rating: -1}).limit(60, callback);
+}
 
 /*
 function getPhotoDetail(id, cb){
@@ -81,12 +74,36 @@ return data
 
 */
 
+// Homepage
+router.get('/', function(req, res) {
+  getCameras(function(err, cameras) {
+      // docs is an array of all the documents in mycollection
+      res.render('home', { cameras: cameras || []  });
+  });
+});
+
+
 // camera details
 router.get('/camera/:name', function(req, res) {
-  console.log('Showing camera: ', req.params.id)
+  console.log('Showing camera: ', req.params.name);
+  var cameraName = req.params.name;
   
-  getCameras(function(cameras){
-   db.cameras.findOne({name: req.params.name}, function(err, cam) {
+  getCameras(function(err, cameras) {
+    getPhotosFromCamera(cameraName, function(err, photoset) {
+      // docs is an array of all the documents in mycollection
+      console.log('Processing camera ', cameraName);
+      res.render('camera', { cameras: cameras, cameraName: cameraName, photoset: photoset });
+    });
+  });
+});
+
+
+// photoset given camera and lens
+router.get('/camera/:camera/lens/:lens', function(req, res) {
+  console.log('Showing camera: ', req.params.camera, ' and lens: ', req.params.lens)
+  
+  getPhotoset(function(cameras){
+    db.cameras.findOne({name: req.params.name}, function(err, cam) {
       getPhotoset(cam.camera, cam.lens, function(err, photoset) {
         // docs is an array of all the documents in mycollection
         console.log(cam.name);
