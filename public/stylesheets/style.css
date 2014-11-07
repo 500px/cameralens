@@ -7,6 +7,30 @@ a {
   color: #00B7FF;
 }
 
-li {
+a.back {
+  text-transform: uppercase;
+
+}
+
+ol li {
+  font-size: 140%;
+}
+
+
+ul li {
   list-style: none;
+}
+
+ul.pics {
+  padding: 0;
+}
+
+ul.pics li {
+  display: inline-block;
+  width: 49%;
+}
+
+img.pic {
+  width: 90%;
+  margin: 10px 5%;
 }

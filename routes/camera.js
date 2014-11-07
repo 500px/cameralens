@@ -37,7 +37,7 @@ function getPhotosFromCamera(camera, callback) {
   db.photos.find({camera: camera}).sort({highest_rating: -1}).limit(10, function(err, photos) {
     var count = 0;
     photos.forEach(function(photo) {
-      console.log('Getting photo ', photo.id);
+      console.log('Getting photo', photo.id);
       var req = https.request({
         host: 'api.500px.com',
         port: 443,

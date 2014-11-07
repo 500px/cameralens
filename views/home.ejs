@@ -1,11 +1,11 @@
 <% layout('layout') -%>    
 
-<h1>Top Cameras</h1>
+<h1>Top Cameras on 500px</h1>
 
-<ul>
+<ol>
 <% for(var i=0; i<cameras.length; i++) {
   var c = cameras[i];  %>
    <li><a href="/camera/<%= c.name %>"><%= c.name %></a></li>
 <% } %>
-</ul>
+</ol>
 
