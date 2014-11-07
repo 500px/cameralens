@@ -36,7 +36,7 @@ var createCamera = function(cameraName, lensDoc, callback) {
     '$setOnInsert': {
       name: cameraName
     }, '$addToSet': {
-      lenses: lensDoc._id
+      lenses: lensDoc.name
     }, '$inc': {
       photoCount: 1
     }
@@ -70,6 +70,9 @@ var count = 0;
 var finished = false;
 var total = 0;
 
+var finishedFirstLens = false;
+var finishedFirstCamera = false;
+
 var reader = csv.createCsvFileReader('photo_meta.csv.small', 
                                      {'separator': ',',
                                      'quote':'"',
@@ -93,10 +96,18 @@ reader.addListener('data', function(data){
   }
  
   createLens(lensName, function(err, lensDoc) {
+    if (!finishedFirstLens) {
+      finishedFirstLens = true;
+      console.log("Finished making first lens item!");
+    }
     createCamera(cameraName, lensDoc, function(err, cameraDoc) {
+      if (!finishedFirstCamera) {
+        finishedFirstCamera = true;
+        console.log("Finished making first camera item!");
+      }
       db.photos.insert({
-        camera: cameraDoc._id,
-        lens: lensDoc._id,
+        camera: cameraDoc.name,
+        lens: lensDoc.name,
         id: data.id,
         focal_length: data.focal_length,
         iso: data.iso,
