@@ -123,24 +123,4 @@ reader.addListener('end', function(){
   finished = true;
 });
 
-
-
-
-
-/*db.cameras.save({ name: 'Canon' }, function(err, success){
-  console.log("err=" + err + " success=" + success);
-});
-*/
-
-//db.cameras.ensureIndex( ['name', 'mount'] )
-
-/*db.cameras.findOne({name: "Canon"}, function(err, doc) {
-  console.log(doc.name);
-  process.exit(0);
-});
-*/
-
-
-
-
 }).call(this);

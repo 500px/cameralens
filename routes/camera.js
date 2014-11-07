@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var mongojs = require('mongojs');
-
+var https = require('https');
 var csv = require('ya-csv');
 
 // DB setup
@@ -29,12 +29,38 @@ function getPhotoset(camera, lens, callback){
   var find = {camera: camera}
   if (lens) find.lens = lens;
 
-  db.photos.find(find).sort({highest_rating: -1}).limit(60, callback);
+  db.photos.find(find).sort({highest_rating: -1}).limit(10, callback);
   // return 50 photos, ordere by DESC 
 }
 
 function getPhotosFromCamera(camera, callback) {
-  db.photos.find({camera: camera}).sort({highest_rating: -1}).limit(60, callback);
+  db.photos.find({camera: camera}).sort({highest_rating: -1}).limit(10, function(err, photos) {
+    var count = 0;
+    photos.forEach(function(photo) {
+      console.log('Getting photo ', photo.id);
+      var req = https.request({
+        host: 'api.500px.com',
+        port: 443,
+        path: '/v1/photos/' + photo.id + '?consumer_key=5258tqxlxoTBAdE3sAm2yA43eo5in6r8fSTqyEMt',
+        method: 'GET'
+      }, function(res) {
+        res.on('data', function(data) {
+          count++;
+          var info = JSON.parse(data);
+          photo.src = info.photo.image_url;
+          photo.url = 'https://500px.com' + info.photo.url;
+          if (count == photos.length) {
+            console.log(photos);
+            callback(err, photos);
+          }
+        });
+      });
+      req.end();
+      req.on('error', function(error) {
+        console.log("ERROR!!!!!!!!!", error);
+      });
+    });
+  });
 }
 
 /*
@@ -92,7 +118,7 @@ router.get('/camera/:name', function(req, res) {
     getPhotosFromCamera(cameraName, function(err, photoset) {
       // docs is an array of all the documents in mycollection
       console.log('Processing camera ', cameraName);
-      res.render('camera', { cameras: cameras, cameraName: cameraName, photoset: photoset });
+      res.render('camera', { cameras: cameras || [], cameraName: cameraName, photoset: photoset });
     });
   });
 });
