@@ -15,7 +15,7 @@ var db = mongojs(db_url, ['photos', 'cameras', 'lenses',]);
 function getCameras(callback){
   db.cameras.find().sort({
     photoCount: -1
-  }).limit(10, callback); 
+  }).limit(30, callback); 
 }
 
 function getCamera(camera, callback){
