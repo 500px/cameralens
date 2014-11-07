@@ -12,6 +12,7 @@ var db = mongojs(db_url, ['photos', 'cameras', 'lenses',]);
 router.get('/', function(req, res) {
   getCameras(function(err, cameras) {
       // docs is an array of all the documents in mycollection
+      console.log('cameras',cameras);
       res.render('home', { cameras: cameras || []  });
   });
   
