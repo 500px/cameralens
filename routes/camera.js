@@ -37,6 +37,7 @@ function getLenses(camera, callback) {
 function getPhotoset(camera, lens, callback){
   db.photos.find({camera: camera, lens: lens}).sort({highest_rating: -1}).limit(30, function(err, photos) {
     var count = 0;
+    var total = photos.length;
     photos.forEach(function(photo) {
       console.log('Getting photo', photo.id);
       var req = https.request({
@@ -46,11 +47,15 @@ function getPhotoset(camera, lens, callback){
         method: 'GET'
       }, function(res) {
         res.on('data', function(data) {
-          count++;
           var info = JSON.parse(data);
+          if (info.status == 404) {
+            total--;
+            return;
+          }
+          count++;
           photo.src = info.photo.image_url;
           photo.url = 'https://500px.com' + info.photo.url;
-          if (count == photos.length) callback(err, photos);
+          if (count == total) callback(err, photos);
         });
       });
       req.end();
@@ -62,8 +67,9 @@ function getPhotoset(camera, lens, callback){
 }
 
 function getPhotosFromCamera(camera, callback) {
-  db.photos.find({camera: camera}).sort({highest_rating: -1}).limit(30, function(err, photos) {
+  db.photos.find({camera: camera}).sort({highest_rating: -1}).limit(10, function(err, photos) {
     var count = 0;
+    var total = photos.length;
     photos.forEach(function(photo) {
       console.log('Getting photo', photo.id);
       var req = https.request({
@@ -73,11 +79,15 @@ function getPhotosFromCamera(camera, callback) {
         method: 'GET'
       }, function(res) {
         res.on('data', function(data) {
-          count++;
           var info = JSON.parse(data);
+          if (info.status == 404) {
+            total--;
+            return;
+          }
+          count++;
           photo.src = info.photo.image_url;
           photo.url = 'https://500px.com' + info.photo.url;
-          if (count == photos.length) callback(err, photos);
+          if (count == total) callback(err, photos);
         });
       });
       req.end();
@@ -95,7 +105,7 @@ function getFocalLengths(lens, callback) {
   }, {
     '$group': {_id: "$focal_length", count: { '$sum': 1 }}
   }, function(err, docs) {
-    docs = _.filter(docs, function(obj) { return obj._id != '' && !/^\d*\.0$/.test(obj._id) });
+    docs = _.filter(docs, function(obj) { console.log(obj._id); return obj._id != '' && !/^\d*\.0$/.test(obj._id) });
     docs = _.map(docs, function(obj) { obj._id = parseInt(obj._id, 10); return obj });
     docs = _.sortBy(docs, function(obj) { return obj._id });
     callback(err, docs);
