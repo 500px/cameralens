@@ -3,7 +3,22 @@
 
 <h1><%= cameraName %></h1>
 
+<h3>Top lenses</h3>
+
+<ol>
+<% 
+for(var i=0; i<lensDocs.length; i++) {
+  var lens = lensDocs[i];  %>
+   <li><a href="/camera/<%= encodeURIComponent(cameraName) %>/lens/<%= encodeURIComponent(lens.name) %>"><%= lens.name %></a></li>
+<% } %>
+</ol>
+
+
+
 <h3>Top photos</h3>
+
+
+<div class='count'>There are <strong><%= cameraDoc.photoCount %></strong> photos for the <strong><%= cameraName %></strong>. Here are the top photos:</div>
 
  <ul class="pics">
 <% for(var i=0; i< photoset.length; i++) {

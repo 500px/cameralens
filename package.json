@@ -19,6 +19,7 @@
     "morgan": "~1.0.0",
     "q": "^1.0.1",
     "static-favicon": "~1.0.0",
-    "ya-csv": "^0.9.4"
+    "ya-csv": "^0.9.4",
+    "underscore": "~1.7.0"
   }
 }

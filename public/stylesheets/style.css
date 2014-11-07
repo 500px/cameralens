@@ -12,6 +12,10 @@ a.back {
 
 }
 
+h1 .arrow {
+  font: 100% "Courier New", monospace;
+}
+
 ol li {
   font-size: 140%;
 }
@@ -31,6 +35,12 @@ ul.pics li {
 }
 
 img.pic {
-  width: 90%;
-  margin: 10px 5%;
+  max-height: 500px;
+  max-width: 100%;
+  margin: 10px auto;
+}
+
+div.count {
+  margin: 30px 10px;
+  font-size: 130%;
 }
