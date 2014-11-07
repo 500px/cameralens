@@ -30,14 +30,24 @@
     </div>
 
 
-CAMMM
+Cameras
  <ul>
 <% for(var i=0; i<cameras.length; i++) {
   var c = cameras[i];  %>
-   <li ><a href="/camera/<%= c.name %>"><%= c.name %> </a></li>
+   <li ><a href="/camera/<%= c.name %>" <% if( locals.camera && locals.camera == c.name ){ %> selected="selected" <% } %>><%= c.name %> </a></li>
 <% } %>
 </ul>
 
+<!-- todo: make this a drop down, and plug in the JS to redirect to href  -->
+
+
+LENS
+ <ul>
+<% for(var i=0; i<lens.length; i++) {
+  var l = lens[i];  %>
+   <li ><a href="/camera/<%= camera.name %>/<%= l.name %>"  <% if( locals.lens && locals.lens == l.name ){ %> selected="selected" <% } %> ><%= l.name %> </a></li>
+<% } %>
+</ul>
  
   </div>
 
