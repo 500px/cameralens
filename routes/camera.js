@@ -105,7 +105,7 @@ function getFocalLengths(lens, callback) {
   }, {
     '$group': {_id: "$focal_length", count: { '$sum': 1 }}
   }, function(err, docs) {
-    docs = _.filter(docs, function(obj) { console.log(obj._id); return obj._id != '' && !/^\d*\.0$/.test(obj._id) });
+    docs = _.filter(docs, function(obj) { console.log(obj._id); return obj._id != '' && isFinite(obj._id) && !/^\d*\.0$/.test(obj._id) });
     docs = _.map(docs, function(obj) { obj._id = parseInt(obj._id, 10); return obj });
     docs = _.sortBy(docs, function(obj) { return obj._id });
     callback(err, docs);
@@ -124,7 +124,7 @@ router.get('/', function(req, res) {
 
 // camera details
 router.get('/camera/:name', function(req, res) {
-  console.log('Showing camera: ', req.params.name);
+  console.log('Showing camera:', req.params.name);
   var cameraName = req.params.name;
   
   getCamera(cameraName, function(err, cameraDoc) {
