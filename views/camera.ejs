@@ -24,6 +24,16 @@
  
 
 <h1>Guide</h1>
+
+
+ <ul>
+<% for(var i=0; i< photos.length; i++) {
+  var p = photos[i];  %>
+   <li ><a href="<%= p.url %>"><img src="<%= p.src %>" ></a></li>
+<% } %>
+</ul>
+
+
 gdsf
 gdfs
 gdf
