@@ -35,7 +35,7 @@ function getLenses(camera, callback) {
 }
 
 function getPhotoset(camera, lens, callback){
-  db.photos.find({camera: camera, lens: lens}).sort({highest_rating: -1}).limit(10, function(err, photos) {
+  db.photos.find({camera: camera, lens: lens}).sort({highest_rating: -1}).limit(30, function(err, photos) {
     var count = 0;
     photos.forEach(function(photo) {
       console.log('Getting photo', photo.id);
@@ -62,7 +62,7 @@ function getPhotoset(camera, lens, callback){
 }
 
 function getPhotosFromCamera(camera, callback) {
-  db.photos.find({camera: camera}).sort({highest_rating: -1}).limit(10, function(err, photos) {
+  db.photos.find({camera: camera}).sort({highest_rating: -1}).limit(30, function(err, photos) {
     var count = 0;
     photos.forEach(function(photo) {
       console.log('Getting photo', photo.id);
