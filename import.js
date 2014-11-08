@@ -109,11 +109,13 @@ reader.addListener('data', function(data){
         aperture: data.aperture,
         highest_rating: data.highest_rating
       }, function(err, doc) {
-        if (++count % 1000 == 0 || count == 1) console.log("Done processing photo #", count);
+        if (++count % 1000 == 0 || count == 1) console.log("Done processing photo #", count); 
         if (finished && count == total) {
           console.log("FINISHED processing photos!");
-          process.exit(0);
+          process.exit(0); 
         }
+        data = null;// prevents memory leaks
+        return null;// memory leak?
       });
     });
   });
