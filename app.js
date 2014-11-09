@@ -3,15 +3,13 @@ var path = require('path');
 var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
-var expressSession = require('express-session');
 var bodyParser = require('body-parser');
 var engine = require('ejs-locals'); 
 var os = require('os'); 
-  
 
 var app = express();
-   
-   console.log('process.env.MONGOHQ_URL : ',process.env.MONGOHQ_URL)
+
+console.log('process.env.MONGOHQ_URL : ',process.env.MONGOHQ_URL)
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -31,8 +29,6 @@ var session    = require('express-session');
 app.use(express.static(path.join(__dirname, 'public'))); 
 
 app.use('/', require('./routes/camera'));
-app.use('/api', require('./routes/api'));
-  
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {

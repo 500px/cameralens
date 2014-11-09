@@ -105,7 +105,7 @@ function getFocalLengths(lens, callback) {
   }, {
     '$group': {_id: "$focal_length", count: { '$sum': 1 }}
   }, function(err, docs) {
-    docs = _.filter(docs, function(obj) { console.log(obj._id); return obj._id != '' && isFinite(obj._id) && !/^\d*\.0$/.test(obj._id) });
+    docs = _.filter(docs, function(obj) { return obj._id != '' && isFinite(obj._id) && !/^\d*\.0$/.test(obj._id) });
     docs = _.map(docs, function(obj) { obj._id = parseInt(obj._id, 10); return obj });
     docs = _.sortBy(docs, function(obj) { return obj._id });
     callback(err, docs);
