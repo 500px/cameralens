@@ -30,14 +30,19 @@ ul.pics {
 }
 
 ul.pics li {
-  display: inline-block;
-  width: 49%;
+  display: inline-block; 
 }
 
 img.pic {
+  /*
   max-height: 500px;
   max-width: 100%;
-  margin: 10px auto;
+  margin: 10px auto;*/
+
+  margin: 10px 10px;
+height: 172px;
+float: left;
+
 }
 
 div.count {
