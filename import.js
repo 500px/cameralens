@@ -72,7 +72,7 @@ var total = 0;
 var lensCount = 0;
 var cameraCount = 0;
 
-var reader = csv.createCsvFileReader('photo_meta.csv.small', 
+var reader = csv.createCsvFileReader('data_sample.csv', 
                                      {'separator': ',',
                                      'quote':'"',
                                      'escape':'\\',
