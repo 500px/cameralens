@@ -5,7 +5,7 @@ Basic prototype for analyzing and refining EXIF data in photos. Used on data in 
 
 ### What does it do?
 
-This simple node.js application is a proof of concept for a potential application for EXIF data on 500px. A basic sample of the data is provided in `data_sample.csv`. Cluster analysis of the data has been performed using OpenRefine to clean up the messy data, and a basic dictionary for correcting all the messy data has been created in `refine_cluster.json`. After clustering the data, basic stats on the data can be shown such as top cameras used on 500px, top lenses used for each camera, top photos for each camera or camera/lens combination, and popular focal lengths used for a camera/lens combination. 
+This simple node.js application is a proof of concept for a potential application for EXIF data on 500px. You will need a basic sample of the data in `data_sample.csv`. Cluster analysis of the data has been performed using OpenRefine to clean up the messy data, and a basic dictionary for correcting all the messy data would be needed in `refine_cluster.json`. After clustering the data, basic stats on the data can be shown such as top cameras used on 500px, top lenses used for each camera, top photos for each camera or camera/lens combination, and popular focal lengths used for a camera/lens combination. 
 
 ### Why did we make this?
 
